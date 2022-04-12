@@ -53,17 +53,39 @@ router.post("/", (req, res) => {
           });
         });
     });
-    //   .catch((error) => {
-    //     console.log(error);
-    //     res.status(500).json({
-    //       message: "There was an error while saving the post to the database",
-    //     });
-    //   });
   }
 });
 
-// router.verb("/", (req, res) => {});
-// router.verb("/", (req, res) => {});
+// router.put("/:id", (req, res) => {
+//   const changes = req.body;
+//   Posts.update(req.params.id, changes)
+//     .then((post) => {
+//         if()
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//       res
+//         .status(500)
+//         .json({ message: "The post information could not be modified" });
+//     });
+// });
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const post = await Posts.findById(req.params.id);
+    if (!post) {
+      res
+        .status(404)
+        .json({ message: "The post with the specified ID does not exist" });
+    } else {
+      await Posts.remove(req.params.id);
+      res.json(post);
+    }
+  } catch (err) {
+    res.status(500).json({ message: "The post could not be removed" });
+  }
+});
+
 // router.verb("/", (req, res) => {});
 
 module.exports = router;
